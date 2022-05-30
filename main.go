@@ -187,7 +187,8 @@ func seccompIter() {
 	for id := 0; id <= unix.SYS_RSEQ; id++ {
 		// these cause a hang, so just skip
 		// rt_sigreturn, select, pause, pselect6, ppoll
-		if id == unix.SYS_RT_SIGRETURN || id == unix.SYS_SELECT || id == unix.SYS_PAUSE || id == unix.SYS_PSELECT6 || id == unix.SYS_PPOLL {
+		//if id == unix.SYS_RT_SIGRETURN || id == unix.SYS_SELECT || id == unix.SYS_PAUSE || id == unix.SYS_PSELECT6 || id == unix.SYS_PPOLL {
+		if id == unix.SYS_RT_SIGRETURN || id == unix.SYS_PSELECT6 || id == unix.SYS_PPOLL {
 			continue
 		}
 		// exit_group and exit -- causes us to exit.. doh!
@@ -197,7 +198,8 @@ func seccompIter() {
 
 		// things currently break horribly if  CLONE, FORK or VFORK are called and the call succeeds
 		// guess it should be straight forward to kill the forks
-		if id == unix.SYS_CLONE || id == unix.SYS_FORK || id == unix.SYS_VFORK {
+		//if id == unix.SYS_CLONE || id == unix.SYS_FORK || id == unix.SYS_VFORK {
+		if id == unix.SYS_CLONE {
 			continue
 		}
 
@@ -246,18 +248,18 @@ func syscallName(e int) string {
 		return "READ"
 	case unix.SYS_WRITE:
 		return "WRITE"
-	case unix.SYS_OPEN:
-		return "OPEN"
+//	case unix.SYS_OPEN:
+//		return "OPEN"
 	case unix.SYS_CLOSE:
 		return "CLOSE"
-	case unix.SYS_STAT:
-		return "STAT"
+//	case unix.SYS_STAT:
+//		return "STAT"
 	case unix.SYS_FSTAT:
 		return "FSTAT"
-	case unix.SYS_LSTAT:
-		return "LSTAT"
-	case unix.SYS_POLL:
-		return "POLL"
+//	case unix.SYS_LSTAT:
+//		return "LSTAT"
+//	case unix.SYS_POLL:
+//		return "POLL"
 	case unix.SYS_LSEEK:
 		return "LSEEK"
 	case unix.SYS_MMAP:
@@ -284,12 +286,12 @@ func syscallName(e int) string {
 		return "READV"
 	case unix.SYS_WRITEV:
 		return "WRITEV"
-	case unix.SYS_ACCESS:
-		return "ACCESS"
-	case unix.SYS_PIPE:
-		return "PIPE"
-	case unix.SYS_SELECT:
-		return "SELECT"
+//	case unix.SYS_ACCESS:
+//		return "ACCESS"
+//	case unix.SYS_PIPE:
+//		return "PIPE"
+//	case unix.SYS_SELECT:
+//		return "SELECT"
 	case unix.SYS_SCHED_YIELD:
 		return "SCHED_YIELD"
 	case unix.SYS_MREMAP:
@@ -308,16 +310,16 @@ func syscallName(e int) string {
 		return "SHMCTL"
 	case unix.SYS_DUP:
 		return "DUP"
-	case unix.SYS_DUP2:
-		return "DUP2"
-	case unix.SYS_PAUSE:
-		return "PAUSE"
+//	case unix.SYS_DUP2:
+//		return "DUP2"
+//	case unix.SYS_PAUSE:
+//		return "PAUSE"
 	case unix.SYS_NANOSLEEP:
 		return "NANOSLEEP"
 	case unix.SYS_GETITIMER:
 		return "GETITIMER"
-	case unix.SYS_ALARM:
-		return "ALARM"
+//	case unix.SYS_ALARM:
+//		return "ALARM"
 	case unix.SYS_SETITIMER:
 		return "SETITIMER"
 	case unix.SYS_GETPID:
@@ -356,10 +358,10 @@ func syscallName(e int) string {
 		return "GETSOCKOPT"
 	case unix.SYS_CLONE:
 		return "CLONE"
-	case unix.SYS_FORK:
-		return "FORK"
-	case unix.SYS_VFORK:
-		return "VFORK"
+//	case unix.SYS_FORK:
+//		return "FORK"
+//	case unix.SYS_VFORK:
+//		return "VFORK"
 	case unix.SYS_EXECVE:
 		return "EXECVE"
 	case unix.SYS_EXIT:
@@ -398,40 +400,40 @@ func syscallName(e int) string {
 		return "TRUNCATE"
 	case unix.SYS_FTRUNCATE:
 		return "FTRUNCATE"
-	case unix.SYS_GETDENTS:
-		return "GETDENTS"
+//	case unix.SYS_GETDENTS:
+//		return "GETDENTS"
 	case unix.SYS_GETCWD:
 		return "GETCWD"
 	case unix.SYS_CHDIR:
 		return "CHDIR"
 	case unix.SYS_FCHDIR:
 		return "FCHDIR"
-	case unix.SYS_RENAME:
-		return "RENAME"
-	case unix.SYS_MKDIR:
-		return "MKDIR"
-	case unix.SYS_RMDIR:
-		return "RMDIR"
-	case unix.SYS_CREAT:
-		return "CREAT"
-	case unix.SYS_LINK:
-		return "LINK"
-	case unix.SYS_UNLINK:
-		return "UNLINK"
-	case unix.SYS_SYMLINK:
-		return "SYMLINK"
-	case unix.SYS_READLINK:
-		return "READLINK"
-	case unix.SYS_CHMOD:
-		return "CHMOD"
+//	case unix.SYS_RENAME:
+//		return "RENAME"
+//	case unix.SYS_MKDIR:
+//		return "MKDIR"
+//	case unix.SYS_RMDIR:
+//		return "RMDIR"
+//	case unix.SYS_CREAT:
+//		return "CREAT"
+//	case unix.SYS_LINK:
+//		return "LINK"
+//	case unix.SYS_UNLINK:
+//		return "UNLINK"
+//	case unix.SYS_SYMLINK:
+//		return "SYMLINK"
+//	case unix.SYS_READLINK:
+//		return "READLINK"
+//	case unix.SYS_CHMOD:
+//		return "CHMOD"
 	case unix.SYS_FCHMOD:
 		return "FCHMOD"
-	case unix.SYS_CHOWN:
-		return "CHOWN"
+//	case unix.SYS_CHOWN:
+//		return "CHOWN"
 	case unix.SYS_FCHOWN:
 		return "FCHOWN"
-	case unix.SYS_LCHOWN:
-		return "LCHOWN"
+//	case unix.SYS_LCHOWN:
+//		return "LCHOWN"
 	case unix.SYS_UMASK:
 		return "UMASK"
 	case unix.SYS_GETTIMEOFDAY:
@@ -464,8 +466,8 @@ func syscallName(e int) string {
 		return "SETPGID"
 	case unix.SYS_GETPPID:
 		return "GETPPID"
-	case unix.SYS_GETPGRP:
-		return "GETPGRP"
+//	case unix.SYS_GETPGRP:
+//		return "GETPGRP"
 	case unix.SYS_SETSID:
 		return "SETSID"
 	case unix.SYS_SETREUID:
@@ -506,22 +508,22 @@ func syscallName(e int) string {
 		return "RT_SIGSUSPEND"
 	case unix.SYS_SIGALTSTACK:
 		return "SIGALTSTACK"
-	case unix.SYS_UTIME:
-		return "UTIME"
-	case unix.SYS_MKNOD:
-		return "MKNOD"
-	case unix.SYS_USELIB:
-		return "USELIB"
+//	case unix.SYS_UTIME:
+//		return "UTIME"
+//	case unix.SYS_MKNOD:
+//		return "MKNOD"
+//	case unix.SYS_USELIB:
+//		return "USELIB"
 	case unix.SYS_PERSONALITY:
 		return "PERSONALITY"
-	case unix.SYS_USTAT:
-		return "USTAT"
+//	case unix.SYS_USTAT:
+//		return "USTAT"
 	case unix.SYS_STATFS:
 		return "STATFS"
 	case unix.SYS_FSTATFS:
 		return "FSTATFS"
-	case unix.SYS_SYSFS:
-		return "SYSFS"
+//	case unix.SYS_SYSFS:
+//		return "SYSFS"
 	case unix.SYS_GETPRIORITY:
 		return "GETPRIORITY"
 	case unix.SYS_SETPRIORITY:
@@ -550,16 +552,16 @@ func syscallName(e int) string {
 		return "MUNLOCKALL"
 	case unix.SYS_VHANGUP:
 		return "VHANGUP"
-	case unix.SYS_MODIFY_LDT:
-		return "MODIFY_LDT"
+//	case unix.SYS_MODIFY_LDT:
+//		return "MODIFY_LDT"
 	case unix.SYS_PIVOT_ROOT:
 		return "PIVOT_ROOT"
-	case unix.SYS__SYSCTL:
-		return "_SYSCTL"
+//	case unix.SYS__SYSCTL:
+//		return "_SYSCTL"
 	case unix.SYS_PRCTL:
 		return "PRCTL"
-	case unix.SYS_ARCH_PRCTL:
-		return "ARCH_PRCTL"
+//	case unix.SYS_ARCH_PRCTL:
+//		return "ARCH_PRCTL"
 	case unix.SYS_ADJTIMEX:
 		return "ADJTIMEX"
 	case unix.SYS_SETRLIMIT:
@@ -586,34 +588,34 @@ func syscallName(e int) string {
 		return "SETHOSTNAME"
 	case unix.SYS_SETDOMAINNAME:
 		return "SETDOMAINNAME"
-	case unix.SYS_IOPL:
-		return "IOPL"
-	case unix.SYS_IOPERM:
-		return "IOPERM"
-	case unix.SYS_CREATE_MODULE:
-		return "CREATE_MODULE"
+//	case unix.SYS_IOPL:
+//		return "IOPL"
+//	case unix.SYS_IOPERM:
+//		return "IOPERM"
+//	case unix.SYS_CREATE_MODULE:
+//		return "CREATE_MODULE"
 	case unix.SYS_INIT_MODULE:
 		return "INIT_MODULE"
 	case unix.SYS_DELETE_MODULE:
 		return "DELETE_MODULE"
-	case unix.SYS_GET_KERNEL_SYMS:
-		return "GET_KERNEL_SYMS"
-	case unix.SYS_QUERY_MODULE:
-		return "QUERY_MODULE"
+//	case unix.SYS_GET_KERNEL_SYMS:
+//		return "GET_KERNEL_SYMS"
+//	case unix.SYS_QUERY_MODULE:
+//		return "QUERY_MODULE"
 	case unix.SYS_QUOTACTL:
 		return "QUOTACTL"
 	case unix.SYS_NFSSERVCTL:
 		return "NFSSERVCTL"
-	case unix.SYS_GETPMSG:
-		return "GETPMSG"
-	case unix.SYS_PUTPMSG:
-		return "PUTPMSG"
-	case unix.SYS_AFS_SYSCALL:
-		return "AFS_SYSCALL"
-	case unix.SYS_TUXCALL:
-		return "TUXCALL"
-	case unix.SYS_SECURITY:
-		return "SECURITY"
+//	case unix.SYS_GETPMSG:
+//		return "GETPMSG"
+//	case unix.SYS_PUTPMSG:
+//		return "PUTPMSG"
+//	case unix.SYS_AFS_SYSCALL:
+//		return "AFS_SYSCALL"
+//	case unix.SYS_TUXCALL:
+//		return "TUXCALL"
+//	case unix.SYS_SECURITY:
+//		return "SECURITY"
 	case unix.SYS_GETTID:
 		return "GETTID"
 	case unix.SYS_READAHEAD:
@@ -644,16 +646,16 @@ func syscallName(e int) string {
 		return "FREMOVEXATTR"
 	case unix.SYS_TKILL:
 		return "TKILL"
-	case unix.SYS_TIME:
-		return "TIME"
+//	case unix.SYS_TIME:
+//		return "TIME"
 	case unix.SYS_FUTEX:
 		return "FUTEX"
 	case unix.SYS_SCHED_SETAFFINITY:
 		return "SCHED_SETAFFINITY"
 	case unix.SYS_SCHED_GETAFFINITY:
 		return "SCHED_GETAFFINITY"
-	case unix.SYS_SET_THREAD_AREA:
-		return "SET_THREAD_AREA"
+//	case unix.SYS_SET_THREAD_AREA:
+//		return "SET_THREAD_AREA"
 	case unix.SYS_IO_SETUP:
 		return "IO_SETUP"
 	case unix.SYS_IO_DESTROY:
@@ -664,16 +666,16 @@ func syscallName(e int) string {
 		return "IO_SUBMIT"
 	case unix.SYS_IO_CANCEL:
 		return "IO_CANCEL"
-	case unix.SYS_GET_THREAD_AREA:
-		return "GET_THREAD_AREA"
+//	case unix.SYS_GET_THREAD_AREA:
+//		return "GET_THREAD_AREA"
 	case unix.SYS_LOOKUP_DCOOKIE:
 		return "LOOKUP_DCOOKIE"
-	case unix.SYS_EPOLL_CREATE:
-		return "EPOLL_CREATE"
-	case unix.SYS_EPOLL_CTL_OLD:
-		return "EPOLL_CTL_OLD"
-	case unix.SYS_EPOLL_WAIT_OLD:
-		return "EPOLL_WAIT_OLD"
+//	case unix.SYS_EPOLL_CREATE:
+//		return "EPOLL_CREATE"
+//	case unix.SYS_EPOLL_CTL_OLD:
+//		return "EPOLL_CTL_OLD"
+//	case unix.SYS_EPOLL_WAIT_OLD:
+//		return "EPOLL_WAIT_OLD"
 	case unix.SYS_REMAP_FILE_PAGES:
 		return "REMAP_FILE_PAGES"
 	case unix.SYS_GETDENTS64:
@@ -706,16 +708,16 @@ func syscallName(e int) string {
 		return "CLOCK_NANOSLEEP"
 	case unix.SYS_EXIT_GROUP:
 		return "EXIT_GROUP"
-	case unix.SYS_EPOLL_WAIT:
-		return "EPOLL_WAIT"
+//	case unix.SYS_EPOLL_WAIT:
+//		return "EPOLL_WAIT"
 	case unix.SYS_EPOLL_CTL:
 		return "EPOLL_CTL"
 	case unix.SYS_TGKILL:
 		return "TGKILL"
-	case unix.SYS_UTIMES:
-		return "UTIMES"
-	case unix.SYS_VSERVER:
-		return "VSERVER"
+//	case unix.SYS_UTIMES:
+//		return "UTIMES"
+//	case unix.SYS_VSERVER:
+//		return "VSERVER"
 	case unix.SYS_MBIND:
 		return "MBIND"
 	case unix.SYS_SET_MEMPOLICY:
@@ -748,8 +750,8 @@ func syscallName(e int) string {
 		return "IOPRIO_SET"
 	case unix.SYS_IOPRIO_GET:
 		return "IOPRIO_GET"
-	case unix.SYS_INOTIFY_INIT:
-		return "INOTIFY_INIT"
+//	case unix.SYS_INOTIFY_INIT:
+//		return "INOTIFY_INIT"
 	case unix.SYS_INOTIFY_ADD_WATCH:
 		return "INOTIFY_ADD_WATCH"
 	case unix.SYS_INOTIFY_RM_WATCH:
@@ -764,10 +766,10 @@ func syscallName(e int) string {
 		return "MKNODAT"
 	case unix.SYS_FCHOWNAT:
 		return "FCHOWNAT"
-	case unix.SYS_FUTIMESAT:
-		return "FUTIMESAT"
-	case unix.SYS_NEWFSTATAT:
-		return "NEWFSTATAT"
+//	case unix.SYS_FUTIMESAT:
+//		return "FUTIMESAT"
+//	case unix.SYS_NEWFSTATAT:
+//		return "NEWFSTATAT"
 	case unix.SYS_UNLINKAT:
 		return "UNLINKAT"
 	case unix.SYS_RENAMEAT:
@@ -806,12 +808,12 @@ func syscallName(e int) string {
 		return "UTIMENSAT"
 	case unix.SYS_EPOLL_PWAIT:
 		return "EPOLL_PWAIT"
-	case unix.SYS_SIGNALFD:
-		return "SIGNALFD"
+//	case unix.SYS_SIGNALFD:
+//		return "SIGNALFD"
 	case unix.SYS_TIMERFD_CREATE:
 		return "TIMERFD_CREATE"
-	case unix.SYS_EVENTFD:
-		return "EVENTFD"
+//	case unix.SYS_EVENTFD:
+//		return "EVENTFD"
 	case unix.SYS_FALLOCATE:
 		return "FALLOCATE"
 	case unix.SYS_TIMERFD_SETTIME:
